@@ -58,5 +58,35 @@ namespace CourseLibrary.API.Controllers
             var authorResult = mapper.Map<AuthorDto>(authorEntity);
             return CreatedAtRoute("GetAuthor", new { id = authorResult.Id }, authorResult);
         }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<AuthorDto>> CreateCollection(IEnumerable<AuthorCreateDto> authorsList)
+        {
+            var authorEntityList = mapper.Map<IEnumerable<Author>>(authorsList);
+            foreach (var author in authorEntityList)
+            {
+                courseLibraryRepository.AddAuthor(author);
+            }
+            
+            courseLibraryRepository.Save();
+
+            return Ok();
+        }
+
+        // array key: 1,2,3 - needs custom model binder
+        // composite key: key1=value1,key2=value2 - two parameters in method
+
+        //[HttpGet("({ids})")]
+        //public IActionResult GetAuthorsCollection([FromRoute] IEnumerable<Guid> ids)
+        //{
+
+        //}
+
+        [HttpOptions]
+        public IActionResult GetOptions()
+        {
+            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+            return Ok();
+        }
     }
 }

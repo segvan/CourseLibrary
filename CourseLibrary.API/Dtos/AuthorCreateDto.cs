@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CourseLibrary.API.Dtos
 {
@@ -11,5 +12,7 @@ namespace CourseLibrary.API.Dtos
         public DateTimeOffset DateOfBirth { get; set; }
 
         public string MainCategory { get; set; }
+
+        public ICollection<CourseCreateDto> Courses { get; set; } = new List<CourseCreateDto>();
     }
 }
