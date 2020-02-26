@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CourseLibrary.API.Dtos;
+using CourseLibrary.API.Entities;
 using CourseLibrary.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -35,7 +36,7 @@ namespace CourseLibrary.API.Controllers
         }
 
 
-        [HttpGet("{courseId}")]
+        [HttpGet("{courseId}", Name = "GetCourse")]
         [HttpHead("{courseId}")]
         public ActionResult<CourseDto> GetCourse(Guid authorId, Guid courseId)
         {
@@ -53,6 +54,22 @@ namespace CourseLibrary.API.Controllers
 
             var courseDto = mapper.Map<CourseDto>(course);
             return Ok(courseDto);
+        }
+
+        [HttpPost]
+        public ActionResult<CourseDto> CreateCourseForAuthor(Guid authorId, CourseCreateDto courseDto)
+        {
+            if (!courseLibraryRepository.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+            var courseEntity = mapper.Map<Course>(courseDto);
+            courseLibraryRepository.AddCourse(authorId, courseEntity);
+            courseLibraryRepository.Save();
+
+            var courseResult = mapper.Map<CourseDto>(courseEntity);
+            return CreatedAtRoute("GetCourse", new { authorId = authorId, courseId = courseEntity.Id }, courseResult);
         }
     }
 }

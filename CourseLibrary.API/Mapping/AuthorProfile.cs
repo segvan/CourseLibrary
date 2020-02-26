@@ -12,6 +12,8 @@ namespace CourseLibrary.API.Mapping
             CreateMap<Author, AuthorDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(x => $"{x.FirstName} {x.LastName}"))
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(x => x.DateOfBirth.GetCurrentAge()));
+
+            CreateMap<AuthorCreateDto, Author>();
         }
     }
 }
