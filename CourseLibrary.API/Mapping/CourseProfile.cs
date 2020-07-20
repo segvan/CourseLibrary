@@ -10,6 +10,7 @@ namespace CourseLibrary.API.Mapping
         {
             CreateMap<Course, CourseDto>();
             CreateMap<CourseCreateDto, Course>();
+            CreateMap<CourseUpdateDto, Course>();
         }
     }
 }
