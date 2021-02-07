@@ -24,7 +24,7 @@ namespace CourseLibrary.API.Controllers
 
         [HttpGet]
         [HttpHead]
-        public ActionResult<IEnumerable<AuthorDto>> GetAll([FromQuery]AuthorResourceParameters authorResourceParameters)
+        public ActionResult<IEnumerable<AuthorDto>> GetAll([FromQuery] AuthorResourceParameters authorResourceParameters)
         {
             var authorsList = courseLibraryRepository.GetAuthors(authorResourceParameters);
             var authorsListDto = mapper.Map<IEnumerable<AuthorDto>>(authorsList);
@@ -67,7 +67,7 @@ namespace CourseLibrary.API.Controllers
             {
                 courseLibraryRepository.AddAuthor(author);
             }
-            
+
             courseLibraryRepository.Save();
 
             return Ok();
@@ -87,6 +87,22 @@ namespace CourseLibrary.API.Controllers
         {
             Response.Headers.Add("Allow", "GET,OPTIONS,POST");
             return Ok();
+        }
+
+        [HttpDelete("{authorId}")]
+        public ActionResult DeleteAuthor(Guid authorId)
+        {
+            var author = courseLibraryRepository.GetAuthor(authorId);
+
+            if (author == null)
+            {
+                return NotFound();
+            }
+
+            courseLibraryRepository.DeleteAuthor(author);
+            courseLibraryRepository.Save();
+
+            return NoContent();
         }
     }
 }
