@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseLibrary.API.Dtos
 {
-    [CourceTitleMustBeDifferentFromDescriptionAttribute]
+    [CourseTitleMustBeDifferentFromDescriptionAttribute]
     public class CourseCreateDto //: IValidatableObject
     {
         [Required(ErrorMessage ="Title should be not empty")]

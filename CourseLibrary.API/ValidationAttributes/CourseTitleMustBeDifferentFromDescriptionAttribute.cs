@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CourseLibrary.API.ValidationAttributes
 {
-    public class CourceTitleMustBeDifferentFromDescriptionAttribute : ValidationAttribute
+    public class CourseTitleMustBeDifferentFromDescriptionAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var cource = (CourseCreateDto)validationContext.ObjectInstance;
+            var course = (CourseCreateDto)validationContext.ObjectInstance;
 
-            if (cource.Title == cource.Description)
+            if (course.Title == course.Description)
             {
                 return new ValidationResult(
                     ErrorMessage ?? "Description should be different from Title",

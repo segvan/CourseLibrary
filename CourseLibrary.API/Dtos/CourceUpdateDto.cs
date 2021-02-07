@@ -8,7 +8,7 @@ namespace CourseLibrary.API.Dtos
         [MaxLength(100)]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Description should be not empty")]
+        [Required(ErrorMessage = "Description should be not empty!!!")]
         [MaxLength(1500)]
         public string Description { get; set; }
     }

@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 
 namespace CourseLibrary.API
 {
@@ -30,7 +31,12 @@ namespace CourseLibrary.API
             services.AddControllers(opt =>
             {
                 opt.ReturnHttpNotAcceptable = true;
-            }).AddXmlDataContractSerializerFormatters()
+            })
+            .AddXmlDataContractSerializerFormatters()
+            .AddNewtonsoftJson(x =>
+            {
+                x.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            })
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
@@ -45,12 +51,8 @@ namespace CourseLibrary.API
                     problemsDetails.Detail = "See the errors field for details.";
                     problemsDetails.Instance = context.HttpContext.Request.Path;
 
-                    var actionExecContext = context as ActionExecutingContext;
-
-                    //if there are modelstate errors and all arguments were correctly parsed
-                    //than add extra validation errors info
-                    if (context.ModelState.ErrorCount > 0 &&
-                        actionExecContext?.ActionArguments.Count == context.ActionDescriptor.Parameters.Count)
+                    //if there are modelstate errors than add extra validation errors info
+                    if (context.ModelState.ErrorCount > 0)
                     {
                         problemsDetails.Type = "modelvalidationproblem";
                         problemsDetails.Status = StatusCodes.Status422UnprocessableEntity;
